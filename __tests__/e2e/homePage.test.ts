@@ -1,15 +1,15 @@
-// This file should be moved to the `__tests__/e2e/` directory for Puppeteer testing.
-
-const puppeteer = require('puppeteer');
+import { Browser, Page } from 'puppeteer';
+import puppeteer from 'puppeteer';
 
 describe('Home Page', () => {
-  let browser;
-  let page;
+  let browser: Browser;
+  let page: Page;
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });    page = await browser.newPage();
+    });
+    page = await browser.newPage();
 
     await page.setRequestInterception(true);
 
@@ -29,7 +29,7 @@ describe('Home Page', () => {
 
   it('should display the home page', async () => {
     await page.goto('http://localhost:3000'); // Adjust the URL if your app runs on a different port
-    const h1Text = await page.$eval('h1', el => el.textContent);
+    const h1Text = await page.$eval('h1', (el: Element) => el.textContent);
     expect(h1Text).toBe('Welcome to Next.js!');
   });
-}); 
+});

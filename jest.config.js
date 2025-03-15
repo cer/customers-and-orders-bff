@@ -3,7 +3,7 @@ module.exports = {
     {
       displayName: 'unit',
       testEnvironment: 'jsdom',
-      testMatch: ['<rootDir>/__tests__/unit/**/*.test.js'],
+      testMatch: ['<rootDir>/__tests__/unit/**/*.test.{js,jsx,ts,tsx}'],
       setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
       moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/$1',
@@ -15,7 +15,10 @@ module.exports = {
     {
       displayName: 'e2e',
       testEnvironment: 'node',
-      testMatch: ['<rootDir>/__tests__/e2e/**/*.test.js'],
+      testMatch: ['<rootDir>/__tests__/e2e/**/*.test.{js,jsx,ts,tsx}'],
+      transform: {
+        '^.+\\.(t|j)sx?$': '@swc/jest',
+      },
       setupFilesAfterEnv: ['<rootDir>/jest.puppeteer-setup.js'],
     },
   ],
