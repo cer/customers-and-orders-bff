@@ -28,7 +28,7 @@ describe('Home Page', () => {
   });
 
   it('should display the home page', async () => {
-    await page.goto('http://localhost:3001'); // Adjust the URL if your app runs on a different port
+    await page.goto('http://localhost:3000'); // Adjust the URL if your app runs on a different port
     const h1Text = await page.$eval('h1', el => el.textContent);
     expect(h1Text).toBe('Welcome to Next.js!');
   });
