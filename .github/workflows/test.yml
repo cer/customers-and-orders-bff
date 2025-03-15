@@ -1,0 +1,41 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run Unit Tests
+      run: npm run unit-test
+
+    - name: Start application
+      run: npm run dev &
+    
+    - name: Wait for application to be ready
+      run: npx wait-on@8.0.3 http://localhost:3000
+
+    - name: Run E2E Tests
+      run: npm run e2e-test 
