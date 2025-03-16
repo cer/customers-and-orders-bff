@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
       type: 'oauth',
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
-      wellKnown: "http://localhost:9000/.well-known/openid-configuration",
+      wellKnown: process.env.OAUTH_WELL_KNOWN_URL,
       issuer: process.env.OAUTH_ISSUER_URL,
       authorization: {
         url: process.env.OAUTH_AUTHORIZATION_URL,
