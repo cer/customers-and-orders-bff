@@ -21,7 +21,8 @@ jobs:
       authorization-server:
         image: eventuateio/customers-and-orders-spring-authorization-server:756e2e2
         ports:
-          - 9000:9000
+          - 9000/tcp
+#          - 9000:9000
 
     steps:
     - name: Checkout code
@@ -41,8 +42,8 @@ jobs:
 
     - name: Fix env to reference authorization server
       run: |
-        sed -i 's/localhost:9000/authorization-server:9000/g' jest*.setup.js
-        sed 's/localhost:9000/authorization-server:9000/g' < template-dotenv-local > .env.local
+        #sed -i 's/localhost:9000/authorization-server:9000/g' jest*.setup.js
+        sed 's/localhost:9000/127.0.0.1:9000/g' < template-dotenv-local > .env.local
 
     - name: Start application
       run: npm run dev &
