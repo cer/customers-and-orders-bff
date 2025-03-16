@@ -41,7 +41,8 @@ jobs:
 
     - name: Fix env to reference authorization server
       run: |
-        sed -i 's/localhost:9000/authorization-server:9000/g' jest*.setup.js .env.local
+        sed -i 's/localhost:9000/authorization-server:9000/g' jest*.setup.js
+        sed 's/localhost:9000/authorization-server:9000/g' < template-dotenv-local > .env.local
 
     - name: Start application
       run: npm run dev &

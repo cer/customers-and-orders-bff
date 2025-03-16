@@ -1,0 +1,11 @@
+# OAuth2 Configuration
+OAUTH_CLIENT_ID=messaging-client
+OAUTH_CLIENT_SECRET=secret
+OAUTH_ISSUER_URL=http://localhost:9000
+OAUTH_AUTHORIZATION_URL=http://localhost:9000/oauth2/authorize
+OAUTH_TOKEN_URL=http://localhost:9000/oauth2/token
+OAUTH_USERINFO_URL=http://localhost:9000/userinfo
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=dummy_secret_key_for_testing_purposes_only
+OAUTH_WELL_KNOWN_URL=http://localhost:9000/.well-known/openid-configuration
+
