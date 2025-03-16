@@ -18,7 +18,7 @@ jobs:
 
 
     services:
-      authorizationserver:
+      authorization-server:
         image: eventuateio/customers-and-orders-spring-authorization-server:756e2e2
         ports:
           - 9000:9000
@@ -41,10 +41,10 @@ jobs:
 
     - name: Fix env to reference authorization server
       run: |
-        curl --fail -v http://127.0.0.1:${{ job.services.authorizationserver.ports['9000'] }}/actuator/health || echo failed job.services.authorizationserver.ports
+        # 127.0.0.1 or localhost work
+        # authorizationserver does not work
+
         curl --fail -v http://127.0.0.1:9000/actuator/health || echo failed 127.0.0.1:9000
-        curl --fail -v http://localhost:9000/actuator/health || echo failed localhost:9000
-        curl --fail -v http://authorizationserver:9000/actuator/health || echo failed authorizationserverπ:9000
         
         sed 's/localhost:9000/127.0.0.1:9000/g' < template-dotenv-local > .env.local
 
