@@ -41,11 +41,11 @@ jobs:
 
     - name: Fix env to reference authorization server
       run: |
-        echo "authorizationserver available on 127.0.0.1:${{ job.services.authorizationserver.ports['9000'] }}"
+        curl --fail -v http://127.0.0.1:${{ job.services.authorizationserver.ports['9000'] }}/actuator/health || echo failed job.services.authorizationserver.ports
+        curl --fail -v http://127.0.0.1:9000/actuator/health || echo failed 127.0.0.1:9000
+        curl --fail -v http://localhost:9000/actuator/health || echo failed localhost:9000
+        curl --fail -v http://authorizationserver:9000/actuator/health || echo failed authorizationserverπ:9000
         
-        curl -v http://127.0.0.1:${{ job.services.authorizationserver.ports['9000'] }}/actuator/health
-        
-        #sed -i 's/localhost:9000/authorizationserver:9000/g' jest*.setup.js
         sed 's/localhost:9000/127.0.0.1:9000/g' < template-dotenv-local > .env.local
 
     - name: Start application
