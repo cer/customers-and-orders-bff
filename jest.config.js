@@ -11,6 +11,9 @@ module.exports = {
       transform: {
         '^.+\\.(t|j)sx?$': '@swc/jest',
       },
+      transformIgnorePatterns: [
+        'node_modules/(?!(next-auth|@babel/runtime|jose|styled-jsx|@panva/hkdf|uuid|preact|preact-render-to-string)/)'
+      ],
     },
     {
       displayName: 'e2e',
@@ -19,6 +22,9 @@ module.exports = {
       transform: {
         '^.+\\.(t|j)sx?$': '@swc/jest',
       },
+      transformIgnorePatterns: [
+        'node_modules/(?!(next-auth|@babel/runtime|jose|styled-jsx|@panva/hkdf|uuid|preact|preact-render-to-string)/)'
+      ],
       setupFilesAfterEnv: ['<rootDir>/jest.puppeteer-setup.js'],
     },
   ],

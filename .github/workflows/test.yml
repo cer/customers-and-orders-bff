@@ -16,6 +16,13 @@ jobs:
       matrix:
         node-version: [23.5.x]
 
+
+    services:
+      authorization-server:
+        image: eventuateio/customers-and-orders-spring-authorization-server:d8c3605
+        ports:
+          - 9000:9000
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -24,6 +31,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+
 
     - name: Install dependencies
       run: npm install
