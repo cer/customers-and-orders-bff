@@ -19,7 +19,7 @@ jobs:
 
     services:
       authorization-server:
-        image: eventuateio/customers-and-orders-spring-authorization-server:756e2e2
+        image: eventuateio/customers-and-orders-spring-authorization-server:886f123
         ports:
           - 9000:9000
 
