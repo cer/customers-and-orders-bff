@@ -58,7 +58,7 @@ describe('Home Page', () => {
         
     await page.waitForSelector('#signin-status', { timeout: 10000 });
     const signinStatusText = await page.$eval('#signin-status', (el: Element) => el.textContent);
-    expect(signinStatusText).toBe('Signed in as ');
+    expect(signinStatusText).toBe('Signed in as user1');
 
   });
   

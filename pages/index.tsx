@@ -18,7 +18,7 @@ const Home: React.FC = () => {
 
       {session ? (
         <div>
-          <p id="signin-status">Signed in as {session.user?.email}</p>
+          <p id="signin-status">Signed in as {session.user?.name}</p>
           <button
             onClick={() => signOut()}
             className="button"
