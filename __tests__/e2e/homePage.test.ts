@@ -11,16 +11,16 @@ describe('Home Page', () => {
     });
     page = await browser.newPage();
 
-    await page.setRequestInterception(true);
-    
-    page.on('request', (request) => {
-      console.log('Request:', request.url());
-      request.continue();
-    });
-    
-    page.on('response', (response) => {
-      console.log('Response:', response.url(), response.status());
-    });
+    // await page.setRequestInterception(true);
+    //
+    // page.on('request', (request) => {
+    //   console.log('Request:', request.url());
+    //   request.continue();
+    // });
+    //
+    // page.on('response', (response) => {
+    //   console.log('Response:', response.url(), response.status());
+    // });
   });
 
   afterAll(async () => {

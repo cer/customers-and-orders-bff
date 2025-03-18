@@ -4,6 +4,8 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 const Home: React.FC = () => {
   const { data: session, status } = useSession();
 
+  console.log('session=', session);
+
   if (status === 'loading') {
     return (
       <div>
