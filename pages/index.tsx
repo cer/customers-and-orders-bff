@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
+import HomePageSignedIn from '../components/HomePageSignedIn';
 
 const Home: React.FC = () => {
   const { data: session, status } = useSession();
@@ -19,16 +20,7 @@ const Home: React.FC = () => {
       <h1 id="welcome-greeting">Welcome to Next.js!</h1>
 
       {session ? (
-        <div>
-          <p id="signin-status">Signed in as {session.user?.name}</p>
-          <p>{session.authorities ? session.authorities[0] : "none"}</p>
-          <button
-            onClick={() => signOut()}
-            className="button"
-          >
-            Sign out
-          </button>
-        </div>
+        <HomePageSignedIn />
       ) : (
         <div>
           <p id="signin-status">Not signed in</p>
