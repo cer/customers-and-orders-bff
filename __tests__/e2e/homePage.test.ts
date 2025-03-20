@@ -42,6 +42,74 @@ describe('Home Page', () => {
     await homePage.expectSignInStatusToBe('Signed in as user1');
   });
 
+  it('should display orders table after signing in', async () => {
+    await homePage.navigate();
+    await homePage.clickSignIn();
 
+    await loginPage.login('user1', 'password');
+    await consentPage.giveConsent();
 
+    // Wait for loading to complete
+    await homePage.waitForLoadingToComplete();
+
+    // Verify table is visible
+    expect(await homePage.isOrdersTableVisible()).toBe(true);
+
+    // Get all rows and verify structure
+    const rows = await homePage.getOrdersTableRows();
+    expect(rows.length).toBeGreaterThan(0);
+
+    // Verify table headers are present
+    const headers = await page.$$eval('.orders-table th', ths => ths.map(th => th.textContent));
+    expect(headers).toEqual(['Order ID', 'State', 'Rejection Reason']);
+
+    // Verify each row has correct number of columns
+    for (const row of rows) {
+      expect(row.length).toBe(3); // orderId, orderState, rejectionReason
+    }
+  });
+
+  it('should handle orders loading state', async () => {
+    await homePage.navigate();
+    await homePage.clickSignIn();
+
+    await loginPage.login('user1', 'password');
+    await consentPage.giveConsent();
+
+    // Initially should show loading
+    const loadingText = await page.$eval('p', el => el.textContent);
+    expect(loadingText).toBe('Loading orders...');
+
+    // Wait for loading to complete
+    await homePage.waitForLoadingToComplete();
+
+    // Loading text should disappear
+    const loadingElement = await page.$('text/Loading orders...');
+    expect(loadingElement).toBeNull();
+  });
+
+  it('should handle error state gracefully', async () => {
+    // Mock a failed response by intercepting the orders API request
+    await page.setRequestInterception(true);
+    page.on('request', request => {
+      if (request.url().includes('/api/orders')) {
+        request.abort('failed');
+      } else {
+        request.continue();
+      }
+    });
+
+    await homePage.navigate();
+    await homePage.clickSignIn();
+
+    await loginPage.login('user1', 'password');
+    await consentPage.giveConsent();
+
+    // Should show error message
+    const errorMessage = await homePage.getErrorMessage();
+    expect(errorMessage).toBe('Error loading orders');
+
+    // Cleanup
+    await page.setRequestInterception(false);
+  });
 });
