@@ -28,11 +28,8 @@ describe('Home Page', () => {
   it('should display the home page', async () => {
     await homePage.navigate();
 
-    const welcomeText = await homePage.getWelcomeText();
-    expect(welcomeText).toBe('Welcome to Next.js!');
-
-    const signinStatus = await homePage.getSignInStatus();
-    expect(signinStatus).toBe('Not signed in');
+    await homePage.expectWelcomeTextToBe('Welcome to Next.js!');
+    await homePage.expectSignInStatusToBe('Not signed in');
   });
 
   it('should sign in and display signed in status', async () => {
@@ -42,8 +39,7 @@ describe('Home Page', () => {
     await loginPage.login('user1', 'password');
     await consentPage.giveConsent();
 
-    const signinStatus = await homePage.getSignInStatus();
-    expect(signinStatus).toBe('Signed in as user1');
+    await homePage.expectSignInStatusToBe('Signed in as user1');
   });
 
 

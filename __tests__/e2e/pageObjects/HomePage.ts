@@ -42,4 +42,14 @@ export class HomePage {
         const status = await this.getSignInStatus();
         return status.includes('Signed in as');
     }
+
+    async expectWelcomeTextToBe(expectedText: string): Promise<void> {
+        const welcomeText = await this.getWelcomeText();
+        expect(welcomeText).toBe(expectedText);
+    }
+
+    async expectSignInStatusToBe(expectedStatus: string): Promise<void> {
+        const signinStatus = await this.getSignInStatus();
+        expect(signinStatus).toBe(expectedStatus);
+    }
 }
