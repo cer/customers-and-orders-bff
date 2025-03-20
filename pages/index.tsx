@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 const Home: React.FC = () => {
   const { data: session, status } = useSession();
 
-  console.log('session=', session);
+  console.log('client session=', session);
 
   if (status === 'loading') {
     return (
@@ -21,6 +21,7 @@ const Home: React.FC = () => {
       {session ? (
         <div>
           <p id="signin-status">Signed in as {session.user?.name}</p>
+          <p>{session.authorities ? session.authorities[0] : "none"}</p>
           <button
             onClick={() => signOut()}
             className="button"

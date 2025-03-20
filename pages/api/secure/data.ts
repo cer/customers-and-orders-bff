@@ -26,7 +26,8 @@ export default async function handler(
 
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const { accessToken, refreshToken } = token;
-  console.log("server-side token=", { accessToken, refreshToken })
+  console.log("server-side accessToken=", accessToken)
+  console.log("server-side refreshToken=", refreshToken)
 
   // Simulated protected data
   const protectedData: ProtectedData = {

@@ -41,6 +41,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user, account, profile }) {
+      console.log('!! jwt callback', { token, user, account, profile });
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
@@ -50,6 +51,9 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.user = user;
       }
+      if (profile) {
+        token.authorities = profile.authorities;
+      }
       return token;
     },
     async session({ session, token }) {
@@ -57,6 +61,7 @@ export const authOptions: NextAuthOptions = {
       // session.accessToken = token.accessToken;
       // session.refreshToken = token.refreshToken;
       session.user.name = token.name; // Ensure the name is set in the session
+      session.authorities = token.authorities; // Add authorities to the session
       return session;
     },
   },
