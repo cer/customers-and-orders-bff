@@ -63,6 +63,7 @@ export class HomePage {
     }
 
     async isOrdersTableVisible(): Promise<boolean> {
+        await this.page.waitForSelector(this.ordersTableSelector, { timeout: 10000 });
         const table = await this.page.$(this.ordersTableSelector);
         return !!table;
     }
