@@ -22,8 +22,4 @@ export class ConsentPage {
         await this.page.click(this.submitConsentButtonSelector);
     }
 
-    async isConsentFormVisible(): Promise<boolean> {
-        const form = await this.page.$(this.consentFormSelector);
-        return !!form;
-    }
 }

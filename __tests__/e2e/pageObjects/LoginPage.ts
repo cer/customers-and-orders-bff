@@ -24,8 +24,4 @@ export class LoginPage {
         await this.page.click(this.submitButtonSelector);
     }
 
-    async isLoginFormVisible(): Promise<boolean> {
-        const form = await this.page.$(this.loginFormSelector);
-        return !!form;
-    }
 }

@@ -86,12 +86,6 @@ export class HomePage {
         }
     }
 
-    async getErrorMessage(): Promise<string | null> {
-        const errorElement = await this.page.$(this.errorSelector);
-        if (!errorElement) return null;
-        return (await errorElement.evaluate(el => el.textContent)) || null;
-    }
-
     async expectOrderInTable(orderId: string, orderState: string, rejectionReason?: string): Promise<void> {
         const rows = await this.getOrdersTableRows();
         const orderRow = rows.find(row => row[0] === orderId);
