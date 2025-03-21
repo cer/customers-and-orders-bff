@@ -4,6 +4,8 @@ import { HomePage } from './pageObjects/HomePage';
 import { LoginPage } from './pageObjects/LoginPage';
 import { ConsentPage } from './pageObjects/ConsentPage';
 import { ApiHelper } from './pageObjects/ApiHelper';
+import {afterAll, beforeAll, describe, it} from "@jest/globals";
+import expect from "expect";
 
 describe('Protected API', () => {
   let browser: Browser;
@@ -23,16 +25,16 @@ describe('Protected API', () => {
     consentPage = new ConsentPage(page);
     apiHelper = new ApiHelper(page);
 
-    await page.setRequestInterception(true);
-
-    page.on('request', (request) => {
-      console.log('[DEBUG_LOG] Request:', request.url());
-      request.continue();
-    });
-
-    page.on('response', (response) => {
-      console.log('[DEBUG_LOG] Response:', response.url(), response.status());
-    });
+    // await page.setRequestInterception(true);
+    //
+    // page.on('request', (request) => {
+    //   console.log('[DEBUG_LOG] Request:', request.url());
+    //   request.continue();
+    // });
+    //
+    // page.on('response', (response) => {
+    //   console.log('[DEBUG_LOG] Response:', response.url(), response.status());
+    // });
   });
 
   afterAll(async () => {

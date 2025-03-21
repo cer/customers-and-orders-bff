@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      console.log('!! jwt callback', { token, user, account, profile });
+      //console.log('!! jwt callback', { token, user, account, profile });
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      console.log('!! session callback', { session, token });
+      //console.log('!! session callback', { session, token });
       // session.accessToken = token.accessToken;
       // session.refreshToken = token.refreshToken;
       session.user.name = token.name; // Ensure the name is set in the session

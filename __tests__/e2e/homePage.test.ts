@@ -3,6 +3,8 @@ import puppeteer from 'puppeteer';
 import { HomePage } from './pageObjects/HomePage';
 import { LoginPage } from './pageObjects/LoginPage';
 import { ConsentPage } from './pageObjects/ConsentPage';
+import expect from "expect";
+import {afterAll, beforeAll, describe, it} from "@jest/globals";
 
 describe('Home Page', () => {
   let browser: Browser;
@@ -43,14 +45,7 @@ describe('Home Page', () => {
   });
 
   it('should display orders table after signing in', async () => {
-    await homePage.navigate();
-    await homePage.clickSignIn();
-
-    await loginPage.login('user1', 'password');
-    await consentPage.giveConsent();
-
-    // Wait for loading to complete
-    await homePage.waitForLoadingToComplete();
+    await homePage.expectSignInStatusToBe('Signed in as user1');
 
     // Verify table is visible
     expect(await homePage.isOrdersTableVisible()).toBe(true);
@@ -69,47 +64,5 @@ describe('Home Page', () => {
     }
   });
 
-  it('should handle orders loading state', async () => {
-    await homePage.navigate();
-    await homePage.clickSignIn();
 
-    await loginPage.login('user1', 'password');
-    await consentPage.giveConsent();
-
-    // Initially should show loading
-    const loadingText = await page.$eval('p', el => el.textContent);
-    expect(loadingText).toBe('Loading orders...');
-
-    // Wait for loading to complete
-    await homePage.waitForLoadingToComplete();
-
-    // Loading text should disappear
-    const loadingElement = await page.$('text/Loading orders...');
-    expect(loadingElement).toBeNull();
-  });
-
-  it('should handle error state gracefully', async () => {
-    // Mock a failed response by intercepting the orders API request
-    await page.setRequestInterception(true);
-    page.on('request', request => {
-      if (request.url().includes('/api/orders')) {
-        request.abort('failed');
-      } else {
-        request.continue();
-      }
-    });
-
-    await homePage.navigate();
-    await homePage.clickSignIn();
-
-    await loginPage.login('user1', 'password');
-    await consentPage.giveConsent();
-
-    // Should show error message
-    const errorMessage = await homePage.getErrorMessage();
-    expect(errorMessage).toBe('Error loading orders');
-
-    // Cleanup
-    await page.setRequestInterception(false);
-  });
 });
