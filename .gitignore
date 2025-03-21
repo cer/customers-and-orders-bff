@@ -44,3 +44,4 @@ html
 screenshots
 /dev.log
 .output.txt
+/e2e.log

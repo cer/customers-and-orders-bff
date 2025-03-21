@@ -3,6 +3,7 @@ import { Page } from 'puppeteer';
 export class HomePage {
     private page: Page;
     private readonly url = 'http://localhost:3000';
+    private readonly apiUrl: string;
 
     // Selectors
     private readonly welcomeGreetingSelector = '#welcome-greeting';
@@ -12,8 +13,9 @@ export class HomePage {
     private readonly loadingSelector = 'text/Loading orders...';
     private readonly errorSelector = '.error';
 
-    constructor(page: Page) {
+    constructor(page: Page, apiUrl: string = 'http://localhost:3001') {
         this.page = page;
+        this.apiUrl = apiUrl;
     }
 
     async navigate(): Promise<void> {
@@ -83,7 +85,7 @@ export class HomePage {
                 { timeout: 5000 },
                 this.loadingSelector
             );
-        } catch (_) {
+        } catch (_error) {
             throw new Error('Loading indicator did not disappear');
         }
     }

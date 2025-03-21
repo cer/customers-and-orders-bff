@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from "./auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -20,7 +19,10 @@ export default async function handler(
 
 
   try {
-    const response = await fetch('http://localhost:50962/orders', {
+    const ordersApiUrl = process.env.ORDERS_API_URL || 'http://localhost:50962';
+    console.log("ordersApiUrl=", ordersApiUrl);
+
+    const response = await fetch(`${ordersApiUrl}/orders`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
       },

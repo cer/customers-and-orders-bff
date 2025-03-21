@@ -5,27 +5,49 @@ import { LoginPage } from './pageObjects/LoginPage';
 import { ConsentPage } from './pageObjects/ConsentPage';
 import expect from "expect";
 import {afterAll, beforeAll, describe, it} from "@jest/globals";
+import { startMockServer } from './mockServer/ordersMock';
+import { Server } from 'http';
 
+/**
+ * End-to-end tests for the Home Page
+ * These tests verify the integration between the frontend and the Orders API,
+ * using a mock server to simulate the API responses.
+ */
 describe('Home Page', () => {
   let browser: Browser;
   let page: Page;
   let homePage: HomePage;
   let loginPage: LoginPage;
   let consentPage: ConsentPage;
+  let mockServer: Server;
 
   beforeAll(async () => {
+    console.log("starting mock server")
+    mockServer = await startMockServer();
+    console.log("started mock server")
+    process.env.ORDERS_API_URL = 'http://localhost:3001';
     browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     page = await browser.newPage();
-    homePage = new HomePage(page);
+    homePage = new HomePage(page, 'http://localhost:3001');
     loginPage = new LoginPage(page);
     consentPage = new ConsentPage(page);
   });
 
   afterAll(async () => {
     await browser.close();
+    if (mockServer) {
+      await new Promise<void>((resolve) => {
+        mockServer.close(() => resolve());
+      });
+    }
+    delete process.env.ORDERS_API_URL;
   });
+
+  it('should start mock server', async() => {
+    expect(mockServer).toBeTruthy();
+  })
 
   it('should display the home page', async () => {
     await homePage.navigate();
@@ -44,6 +66,16 @@ describe('Home Page', () => {
     await homePage.expectSignInStatusToBe('Signed in as user1');
   });
 
+  /**
+   * Verifies that the orders table is properly displayed after signing in.
+   * Tests:
+   * - Table visibility
+   * - Correct number of orders from mock data
+   * - Table headers match specification
+   * - Order data matches mock server response
+   * - All order states (APPROVED, REJECTED, PENDING) are properly displayed
+   * - Rejection reasons are shown when applicable
+   */
   it('should display orders table after signing in', async () => {
     await homePage.expectSignInStatusToBe('Signed in as user1');
 
@@ -52,17 +84,18 @@ describe('Home Page', () => {
 
     // Get all rows and verify structure
     const rows = await homePage.getOrdersTableRows();
-    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.length).toBe(3); // Should match the number of sample orders
 
     // Verify table headers are present
     const headers = await page.$$eval('.orders-table th', ths => ths.map(th => th.textContent));
     expect(headers).toEqual(['Order ID', 'State', 'Rejection Reason']);
 
-    // Verify each row has correct number of columns
-    for (const row of rows) {
-      expect(row.length).toBe(3); // orderId, orderState, rejectionReason
-    }
+    // Verify specific orders from the mock data
+    await homePage.expectOrderInTable('1', 'APPROVED', '');
+    await homePage.expectOrderInTable('2', 'REJECTED', 'INSUFFICIENT_CREDIT');
+    await homePage.expectOrderInTable('3', 'PENDING', '');
   });
+
 
 
 });

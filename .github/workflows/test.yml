@@ -49,7 +49,7 @@ jobs:
         sed 's/localhost:9000/127.0.0.1:9000/g' < template-dotenv-local > .env.local
 
     - name: Start application
-      run: npm run dev &
+      run: ORDERS_API_URL=http://localhost:3001 npm run dev &
     
     - name: Wait for application to be ready
       run: npx wait-on@8.0.3 --timeout 10s http://localhost:3000
