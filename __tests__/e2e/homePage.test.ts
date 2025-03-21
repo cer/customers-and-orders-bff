@@ -79,8 +79,7 @@ describe('Home Page', () => {
   it('should display orders table after signing in', async () => {
     await homePage.expectSignInStatusToBe('Signed in as user1');
 
-    // Verify table is visible
-    expect(await homePage.isOrdersTableVisible()).toBe(true);
+    await homePage.waitForOrdersTable();
 
     // Get all rows and verify structure
     const rows = await homePage.getOrdersTableRows();

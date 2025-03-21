@@ -62,10 +62,6 @@ export class HomePage {
         await this.page.waitForSelector(this.ordersTableSelector, { timeout: 10000 });
     }
 
-    async isOrdersTableVisible(): Promise<boolean> {
-        await this.page.waitForSelector(this.ordersTableSelector, { timeout: 10000 });
-        return true
-    }
 
     async getOrdersTableRows(): Promise<string[][]> {
         await this.waitForOrdersTable();
