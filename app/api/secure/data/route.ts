@@ -1,7 +1,8 @@
 import { getServerSession } from "next-auth";
-import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from "../auth/[...nextauth]";
+import { NextResponse } from "next/server";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getToken } from "next-auth/jwt";
+import { cookies, headers } from "next/headers";
 
 type ProtectedData = {
   message: string;
@@ -12,17 +13,22 @@ type ProtectedData = {
   }[];
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ProtectedData | { error: string }>
-) {
-  const session = await getServerSession(req, res, authOptions);
+export async function GET() {
+  const session = await getServerSession(authOptions);
 
   if (!session) {
-    return res.status(401).json({ error: "Unauthorized: Please sign in to access this resource" });
+    return NextResponse.json(
+      { error: "Unauthorized: Please sign in to access this resource" },
+      { status: 401 }
+    );
   }
   console.log("server-side session=", session);
   console.log("server-side session.accessToken=", session.accessToken);
+
+  const req = {
+    headers: headers(),
+    cookies: cookies(),
+  };
 
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const { accessToken, refreshToken } = token;
@@ -40,5 +46,5 @@ export default async function handler(
     ],
   };
 
-  res.status(200).json(protectedData);
+  return NextResponse.json(protectedData);
 }

@@ -1,22 +1,28 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from "./auth/[...nextauth]";
-import { NextApiRequest, NextApiResponse } from "next";
-import {getToken} from "next-auth/jwt";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { cookies, headers } from "next/headers";
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
-  const session = await getServerSession(req, res, authOptions);
+export async function GET() {
+  const session = await getServerSession(authOptions);
 
   if (!session) {
-    return res.status(401).json({ error: "Unauthorized: Please sign in to access this resource" });
+    return NextResponse.json(
+      { error: "Unauthorized: Please sign in to access this resource" },
+      { status: 401 }
+    );
   }
+
+  const req = {
+    headers: headers(),
+    cookies: cookies(),
+  };
+
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const { accessToken, refreshToken } = token;
   console.log("server-side accessToken=", accessToken)
   console.log("server-side refreshToken=", refreshToken)
-
 
   try {
     const ordersApiUrl = process.env.ORDERS_API_URL || 'http://localhost:50962';
@@ -33,9 +39,12 @@ export default async function handler(
     }
 
     const data = await response.json();
-    return res.status(200).json(data);
+    return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching orders:', error);
-    return res.status(500).json({ error: 'Failed to fetch orders' });
+    return NextResponse.json(
+      { error: 'Failed to fetch orders' },
+      { status: 500 }
+    );
   }
 }
