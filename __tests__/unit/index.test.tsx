@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { useSession } from 'next-auth/react';
-import Home from '../../pages/index';
+import Home from '../../app/page';
 
 // Mock next-auth
 jest.mock('next-auth/react');
