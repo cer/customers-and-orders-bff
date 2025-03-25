@@ -32,16 +32,18 @@ describe('Home', () => {
         orders: [
           {
             orderId: 1,
-            orderState: 'PENDING',
+            orderState: 'APPROVED',
+            rejectionReason: null
           },
           {
             orderId: 2,
-            orderState: 'APPROVED',
+            orderState: 'REJECTED',
+            rejectionReason: 'INSUFFICIENT_CREDIT'
           },
           {
             orderId: 3,
-            orderState: 'REJECTED',
-            rejectionReason: 'INSUFFICIENT_CREDIT'
+            orderState: 'PENDING',
+            rejectionReason: null
           }
         ]
       })
@@ -65,12 +67,12 @@ describe('Home', () => {
 
     // Check if orders are displayed
     expect(screen.getByText('1')).toBeInTheDocument();
-    expect(screen.getByText('PENDING')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
     expect(screen.getByText('APPROVED')).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
     expect(screen.getByText('REJECTED')).toBeInTheDocument();
     expect(screen.getByText('INSUFFICIENT_CREDIT')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText('PENDING')).toBeInTheDocument();
   });
 
   it('handles API error', async () => {
