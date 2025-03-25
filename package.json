@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "unit-test": "jest --selectProjects unit",
-    "e2e-test": "jest --selectProjects e2e"
+    "e2e-test": "jest --selectProjects e2e",
+    "test": "jest --selectProjects unit,e2e",
+    "all-test": "npm run unit-test && npm run e2e-test"
   },
   "dependencies": {
     "next-auth": "^4.24.5",
