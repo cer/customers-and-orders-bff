@@ -11,13 +11,13 @@ Located in `__tests__/unit`
 
 Run by executing `npm run unit-test`
 
-### End to End tests
+### End-to-End tests
 
 Located in `__tests__/e2e`
 
 Run by executing `npm run e2e-test`
 
-Before running the end-to-end tests the application must be running
+Before running the end-to-end tests, the application must be running
 
 ## Running the application
 
