@@ -7,6 +7,7 @@ import expect from "expect";
 import {afterAll, beforeAll, describe, it} from "@jest/globals";
 import { startMockServer } from './mockServer/ordersMock';
 import { Server } from 'http';
+import { exec } from 'child_process';
 
 /**
  * End-to-end tests for the Home Page
@@ -22,27 +23,67 @@ describe('Home Page', () => {
   let mockServer: Server;
 
   beforeAll(async () => {
-    console.log("starting mock server")
-    mockServer = await startMockServer();
-    console.log("started mock server")
-    process.env.ORDERS_API_URL = 'http://localhost:3001';
-    browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    page = await browser.newPage();
-    homePage = new HomePage(page, 'http://localhost:3001');
-    loginPage = new LoginPage(page);
-    consentPage = new ConsentPage(page);
+    try {
+      // Kill any existing process on port 3001
+      await new Promise<void>((resolve) => {
+        exec('lsof -ti:3001 | xargs kill -9', () => {
+          // Ignore error as it means no process was running on that port
+          resolve();
+        });
+      });
+
+      console.log("starting mock server");
+      mockServer = await startMockServer();
+      console.log("started mock server");
+      process.env.ORDERS_API_URL = 'http://localhost:3001';
+      browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      page = await browser.newPage();
+      homePage = new HomePage(page, 'http://localhost:3001');
+      loginPage = new LoginPage(page);
+      consentPage = new ConsentPage(page);
+    } catch (error) {
+      console.error('Error in beforeAll:', error);
+      // Ensure cleanup if setup fails
+      if (mockServer) {
+        await new Promise<void>((resolve) => {
+          mockServer.close(() => resolve());
+        });
+      }
+      if (browser) {
+        await browser.close();
+      }
+      throw error;
+    }
   });
 
   afterAll(async () => {
-    await browser.close();
-    if (mockServer) {
+    try {
+      if (browser) {
+        await browser.close();
+      }
+      if (mockServer) {
+        await new Promise<void>((resolve, reject) => {
+          mockServer.close((err) => {
+            if (err) {
+              console.error('Error closing mock server:', err);
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+      }
+    } catch (error) {
+      console.error('Error in afterAll:', error);
+    } finally {
+      delete process.env.ORDERS_API_URL;
+      // Kill any remaining process on port 3001
       await new Promise<void>((resolve) => {
-        mockServer.close(() => resolve());
+        exec('lsof -ti:3001 | xargs kill -9', () => resolve());
       });
     }
-    delete process.env.ORDERS_API_URL;
   });
 
   it('should start mock server', async() => {
