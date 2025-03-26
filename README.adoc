@@ -1,0 +1,6 @@
+= Customer and Orders UI + Backend for Front End (BFF)
+
+This is a work-in-progress project that I am hacking together (with the help of GenAI) to learn Next.js.
+
+The goal is to implement a UI and a BFF for a version of my https://github.com/eventuate-tram/eventuate-tram-sagas-examples-customers-and-orders[customers and orders application]
+
