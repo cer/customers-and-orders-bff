@@ -25,12 +25,12 @@ describe('Home Page', () => {
   beforeAll(async () => {
     try {
       // Kill any existing process on port 3001
-      await new Promise<void>((resolve) => {
-        exec('lsof -ti:3001 | xargs kill -9', () => {
-          // Ignore error as it means no process was running on that port
-          resolve();
-        });
-      });
+      // await new Promise<void>((resolve) => {
+      //   exec('lsof -ti:3001 | xargs kill -9', () => {
+      //     // Ignore error as it means no process was running on that port
+      //     resolve();
+      //   });
+      // });
 
       console.log("starting mock server");
       mockServer = await startMockServer();
@@ -80,9 +80,9 @@ describe('Home Page', () => {
     } finally {
       delete process.env.ORDERS_API_URL;
       // Kill any remaining process on port 3001
-      await new Promise<void>((resolve) => {
-        exec('lsof -ti:3001 | xargs kill -9', () => resolve());
-      });
+      // await new Promise<void>((resolve) => {
+      //   exec('lsof -ti:3001 | xargs kill -9', () => resolve());
+      // });
     }
   });
 
