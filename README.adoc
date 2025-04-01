@@ -2,5 +2,20 @@
 
 This is a work-in-progress project that I am hacking together (with the help of GenAI) to learn Next.js.
 
-The goal is to implement a UI and a BFF for a version of my https://github.com/eventuate-tram/eventuate-tram-sagas-examples-customers-and-orders[customers and orders application]
+The goal is to implement a UI and a https://microservices.io/patterns/apigateway.html[Backend-for-frontend] for a version of my https://github.com/eventuate-tram/eventuate-tram-sagas-examples-customers-and-orders[customers and orders application]
+
+== Security
+
+This project implements OAuth 2.0 Authorization Code flow with PKCE.
+
+* The BFF uses `next-auth`
+* https://github.com/cer/customers-and-orders-spring-authorization-server[Spring Authorization Server] is used as the OAuth 2.0 Authorization Server.
+
+=== Request routing
+
+The flow is as follows:
+
+. React UI makes an HTTP `GET /api/orders` request to the BFF. This request includes the Next.js `session` cookie.
+. The BFF maps the session cookie to a JWT
+. The BFF makes an HTTP `GET /orders` request to the `orders` service. This request includes the JWT.
 
