@@ -2,7 +2,6 @@ import { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
 import { HomePage } from './pageObjects/HomePage';
 import { LoginPage } from './pageObjects/LoginPage';
-import { ConsentPage } from './pageObjects/ConsentPage';
 import expect from "expect";
 import {afterAll, beforeAll, describe, it} from "@jest/globals";
 import { startMockServer } from './mockServer/ordersMock';
@@ -19,7 +18,6 @@ describe('Home Page', () => {
   let page: Page;
   let homePage: HomePage;
   let loginPage: LoginPage;
-  let consentPage: ConsentPage;
   let mockServer: Server;
 
   beforeAll(async () => {
@@ -42,7 +40,6 @@ describe('Home Page', () => {
       page = await browser.newPage();
       homePage = new HomePage(page, 'http://localhost:3001');
       loginPage = new LoginPage(page);
-      consentPage = new ConsentPage(page);
     } catch (error) {
       console.error('Error in beforeAll:', error);
       // Ensure cleanup if setup fails
@@ -102,7 +99,7 @@ describe('Home Page', () => {
     await homePage.clickSignIn();
 
     await loginPage.login('user1', 'password');
-    await consentPage.giveConsent();
+    //await consentPage.giveConsent();
 
     await homePage.expectSignInStatusToBe('Signed in as user1');
   });

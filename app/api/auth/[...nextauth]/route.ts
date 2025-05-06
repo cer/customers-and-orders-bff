@@ -2,6 +2,8 @@ import NextAuth from 'next-auth';
 import type { NextAuthOptions } from 'next-auth';
 
 export const authOptions: NextAuthOptions = {
+  debug: true,
+
   providers: [
     {
       id: 'oauth2-pkce',
@@ -10,20 +12,12 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
       wellKnown: process.env.OAUTH_WELL_KNOWN_URL,
-      issuer: process.env.OAUTH_ISSUER_URL,
       authorization: {
-        url: process.env.OAUTH_AUTHORIZATION_URL,
         params: {
-          scope: 'openid profile email',
+          scope: 'openid',
           response_type: 'code',
           code_challenge_method: 'S256',
         },
-      },
-      token: {
-        url: process.env.OAUTH_TOKEN_URL,
-      },
-      userinfo: {
-        url: process.env.OAUTH_USERINFO_URL,
       },
       checks: ['pkce', 'state'],
       profile(profile) {
@@ -41,6 +35,8 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user, account, profile }) {
+      //console.log({ token, user, account, profile })
+      // token is defined, nothing else is
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;

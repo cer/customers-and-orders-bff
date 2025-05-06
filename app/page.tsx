@@ -21,7 +21,7 @@ const Home: React.FC = () => {
     <div className="container">
       <h1 id="welcome-greeting">Welcome to Next.js!</h1>
 
-      {session ? (
+      {status === 'authenticated' ? (
         <HomePageSignedIn />
       ) : (
         <div>

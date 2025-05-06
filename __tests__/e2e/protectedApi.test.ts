@@ -2,7 +2,6 @@ import { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
 import { HomePage } from './pageObjects/HomePage';
 import { LoginPage } from './pageObjects/LoginPage';
-import { ConsentPage } from './pageObjects/ConsentPage';
 import { ApiHelper } from './pageObjects/ApiHelper';
 import {afterAll, beforeAll, describe, it} from "@jest/globals";
 import expect from "expect";
@@ -12,7 +11,6 @@ describe('Protected API', () => {
   let page: Page;
   let homePage: HomePage;
   let loginPage: LoginPage;
-  let consentPage: ConsentPage;
   let apiHelper: ApiHelper;
 
   beforeAll(async () => {
@@ -22,7 +20,6 @@ describe('Protected API', () => {
     page = await browser.newPage();
     homePage = new HomePage(page);
     loginPage = new LoginPage(page);
-    consentPage = new ConsentPage(page);
     apiHelper = new ApiHelper(page);
 
     // await page.setRequestInterception(true);
@@ -54,7 +51,7 @@ describe('Protected API', () => {
     await homePage.clickSignIn();
 
     await loginPage.login('user1', 'password');
-    await consentPage.giveConsent();
+    //await consentPage.giveConsent();
     await homePage.waitForSignInStatus();
 
     console.log("!!!!!!!!!!!!!!!!!! ACCESSING API")
